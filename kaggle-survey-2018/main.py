@@ -119,4 +119,4 @@ if __name__ == '__main__':
 
     file = r'datasets/multipleChoiceResponses.csv'
     df = pd.read_csv(file, low_memory=False)
-    tweak_dataset(df).to_pickle(r'datasets/output.p', compression='gzip')
+    tweak_dataset(df).to_pickle(r'datasets/output.p.gz', compression='gzip')
