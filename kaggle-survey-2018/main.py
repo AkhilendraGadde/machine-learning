@@ -32,7 +32,8 @@ def tweak_dataset(raw: pd.DataFrame) -> pd.DataFrame:
         # 'Q17': 'pref_lang',    
         'Q6': 'target'
     }
-    raw: pd.DataFrame = raw.iloc[1:].filter(columns).rename(columns=columns).reset_index(drop=True)
+    # raw: pd.DataFrame = raw.iloc[1:].filter(columns).rename(columns=columns).reset_index(drop=True)
+    raw: pd.DataFrame = raw.filter(columns).rename(columns=columns).reset_index(drop=True)
 
     raw.gender = raw.gender.apply(str.lower)
     raw.age = raw.age.apply(lambda x: x.replace("+", '').split('-')[0]).astype(np.int64)
@@ -119,6 +120,7 @@ def tweak_dataset(raw: pd.DataFrame) -> pd.DataFrame:
 
 
 class Transformer(base.BaseEstimator, base.TransformerMixin):
+
     """
     Transformer class - data pipeline cleaner
     We need to implement fit & transform for extended classes
@@ -154,8 +156,9 @@ def get_features_and_labels(df: pd.DataFrame, y_labels: list[str]) -> (pd.DataFr
     """
 
     data: pd.DataFrame = df \
+        .copy(deep=True)\
         .query("Q3.isin(['United States of America', 'India']) and Q6.isin(['Data Scientist', 'Software Engineer'])") \
-        .reset_index(drop=True).copy(deep=True)
+        .reset_index(drop=True)
 
     return data.drop(columns=y_labels), data[y_labels]
 
